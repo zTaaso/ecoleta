@@ -3,7 +3,7 @@ module.exports = {
 		es6: true,
 		node: true,
 	},
-	extends: ['airbnb-base'],
+	extends: ['airbnb-base', 'prettier'],
 	globals: {
 		Atomics: 'readonly',
 		SharedArrayBuffer: 'readonly',
@@ -13,10 +13,13 @@ module.exports = {
 		ecmaVersion: 2018,
 		sourceType: 'module',
 	},
-	plugins: ['@typescript-eslint'],
+	plugins: ['@typescript-eslint', 'prettier'],
 	rules: {
 		indent: 'off',
 		'no-tabs': 'off',
 		'import/prefer-default-export': 'off',
+		'class-methods-use-this': 'off',
+		'no-unused-vars': 'off',
+		camelcase: 'off',
 	},
 };
