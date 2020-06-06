@@ -5,6 +5,11 @@ class PointController {
 	async index(req: Request, res: Response) {
 		const { city, uf, items } = req.query;
 
+		if (!city && !uf && !items) {
+			const points = await knex('points').select('*');
+			return res.json(points);
+		}
+
 		const parsedItems = String(items)
 			.split(',')
 			.map((i) => Number(i.trim()));
@@ -72,6 +77,18 @@ class PointController {
 			.select('title');
 
 		return res.json({ point, items });
+	}
+
+	async delete(req: Request, res: Response) {
+		const { id } = req.params;
+
+		const pointId = await knex('points').where('id', id).delete('*');
+
+		if (!pointId) {
+			return res.status(400).json({ message: 'Invalid id.' });
+		}
+
+		return res.json({ message: 'Point was sucessfully deleted.', pointId });
 	}
 }
 
