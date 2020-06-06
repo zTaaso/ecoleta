@@ -8,7 +8,7 @@ class ItemController {
 
 		const serializedItems = items.map((i) => ({
 			...i,
-			url: `http://localhost:3333/uploads/${i.image}`,
+			url: `http://192.168.0.104:3333/uploads/${i.image}`,
 		}));
 
 		return res.json(serializedItems);
