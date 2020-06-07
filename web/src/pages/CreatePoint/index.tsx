@@ -83,7 +83,7 @@ const CreatePoint: React.FC = () => {
 
     const data = {
       ...formData,
-      image: 'meucú',
+      image: 'https://extra.globo.com/incoming/24338854-df4-2a1/w976h550-PROP/carrefour.jpg',
       latitude: location[0],
       longitude: location[1],
       city: selectedCity,
