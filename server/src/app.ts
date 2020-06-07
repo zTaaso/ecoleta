@@ -1,6 +1,7 @@
 import express from 'express';
-import routes from './routes';
 import cors from 'cors';
+import { errors } from 'celebrate';
+import routes from './routes';
 
 class App {
 	server: express.Express;
@@ -10,6 +11,7 @@ class App {
 
 		this.middlewares();
 		this.routes();
+		this.validators();
 	}
 
 	middlewares() {
@@ -19,6 +21,10 @@ class App {
 
 	routes() {
 		this.server.use(routes);
+	}
+
+	validators() {
+		this.server.use(errors());
 	}
 }
 
