@@ -20,6 +20,7 @@ interface HTTPResponseItems {
   id: number;
   title: string;
   url: string;
+  image_url: string;
 }
 interface Item {
   id: number;
@@ -30,6 +31,7 @@ interface Item {
 interface Point {
   id: number;
   image: string;
+  image_url: string;
   name: string;
   latitude: number;
   longitude: number;
@@ -80,7 +82,7 @@ const Points = () => {
       const serializedItems = response.data.map((i) => ({
         id: i.id,
         title: i.title,
-        image_url: i.url,
+        image_url: i.image_url,
       }));
 
       setItems(serializedItems);
