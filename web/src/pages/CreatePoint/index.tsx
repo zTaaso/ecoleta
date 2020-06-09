@@ -5,6 +5,8 @@ import axios from 'axios';
 import { LeafletMouseEvent } from 'leaflet';
 import { FiArrowLeft } from 'react-icons/fi';
 
+import Dropzone from '../../components/Dropzone';
+
 import api from '../../services/api';
 import logo from '../../assets/logo.svg';
 import './styles.css';
@@ -32,17 +34,19 @@ interface IBGECityResponse {
 const CreatePoint: React.FC = () => {
   const [location, setLocation] = useState<[number, number]>([0, 0]);
 
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    whatsapp: '',
+  });
+
   const [collectItems, setCollectItems] = useState<CollectItems[]>([]);
   const [ufs, setUfs] = useState<Ufs[]>([]);
   const [cities, setCities] = useState<string[]>([]);
   const [selectedUf, setSelectedUf] = useState('0');
   const [selectedCity, setSelectedCity] = useState('0');
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    whatsapp: '',
-  });
+  const [selectedFile, setSelectedFile] = useState<File>();
 
   async function getCollectItems() {
     const response = await api.get('/items');
@@ -81,18 +85,30 @@ const CreatePoint: React.FC = () => {
   async function handleSubmit(evt: ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
 
-    const data = {
-      ...formData,
-      image: 'https://extra.globo.com/incoming/24338854-df4-2a1/w976h550-PROP/carrefour.jpg',
-      latitude: location[0],
-      longitude: location[1],
-      city: selectedCity,
-      uf: selectedUf,
-      items: selectedItems,
-    };
+    const { name, email, whatsapp } = formData;
+    const uf = selectedUf;
+    const city = selectedCity;
+    const [latitude, longitude] = location;
+    const items = selectedItems;
+
+    const data = new FormData();
+
+    data.append('name', name);
+    data.append('email', email);
+    data.append('whatsapp', whatsapp);
+    data.append('uf', uf);
+    data.append('city', city);
+    data.append('latitude', String(latitude));
+    data.append('longitude', String(longitude));
+    data.append('items', items.join(','));
+
+    if (selectedFile) {
+      data.append('image', selectedFile);
+    }
 
     const response = await api.post('/points', data);
     console.log(response);
+    alert('Ponto de coleta criado com sucesso!');
   }
 
   useEffect(() => {
@@ -150,6 +166,8 @@ const CreatePoint: React.FC = () => {
         <h1>
           Cadastro do <br /> ponto de coleta
         </h1>
+
+        <Dropzone onFileUploaded={setSelectedFile} />
 
         <fieldset>
           <legend>
